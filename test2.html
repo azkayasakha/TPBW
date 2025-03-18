@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet.js Route</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <!-- Include Leaflet JS -->
+    
+
+    <!-- Include Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+        // Inisialisasi peta
+        var map = L.map('map').setView([-6.96918408476293, 107.6305940928061], 13);  // Koordinat awal peta
+
+        // Menambahkan tile layer (misalnya OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Titik A dan Titik B
+        var titikA = [-6.96918408476293, 107.6305940928061];  // Titik A (misalnya di London)
+        var titikB = [-6.346195240122304, 107.11097284970148];   // Titik B (misalnya dekat titik A)
+
+        // Menambahkan rute menggunakan Leaflet Routing Machine
+        L.Routing.control({
+            waypoints: [
+                L.latLng(titikA),  // Titik A
+                L.latLng(titikB)   // Titik B
+            ],
+            lineOptions: {
+                styles: [
+                    {
+                        color: "#00ACEA",  // Ganti dengan warna yang diinginkan
+                        weight: 5,      // Tebal garis
+                        opacity: 0.7    // Opasitas (keterlihatan)
+                    }
+                ]
+            }
+        }).addTo(map);
+    </script>
+
+</body>
+</html>
+
+

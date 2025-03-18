@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rute Leaflet.js</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+</head>
+<body>
+
+    <div id="map" style="height: 500px;"></div>
+
+    <script>
+        // Inisialisasi Peta
+        var map = L.map('map').setView([-6.5, 107], 8);
+
+        // Tambahkan Tile Layer OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Tambahkan Rute dari Bekasi ke Bandung
+        L.Routing.control({
+            waypoints: [
+                L.latLng(-6.2383, 107.0020), // Koordinat Bekasi
+                L.latLng(-6.9147, 107.6098) // Koordinat Bandung
+            ],
+            routeWhileDragging: true
+        }).addTo(map);
+    </script>
+
+</body>
+</html>
