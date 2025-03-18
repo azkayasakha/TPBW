@@ -20,8 +20,10 @@ while ($resultStasiun = mysqli_fetch_assoc($sqlStasiun)) {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
@@ -43,8 +45,6 @@ while ($resultStasiun = mysqli_fetch_assoc($sqlStasiun)) {
             </div>
         </div>
     </div>
-
-    <div></div>
 
     <script>
         var map = L.map('map').setView([-6.5, 107], 10);
@@ -71,10 +71,47 @@ while ($resultStasiun = mysqli_fetch_assoc($sqlStasiun)) {
         ];
 
         stasiun.forEach(s => {
-            L.marker(s.koordinat).addTo(map).bindPopup(s.nama);
+            var popup = `
+            <div style="text-align: center;">
+                <p><i class="fa-solid fa-train-subway"></i> ${s.nama}</p>
+                <button type="button" class="btn btn-primary btn-sm" onclick="createRoute(${s.koordinat[0]}, ${s.koordinat[1]})">Rute</button>
+            </div>`;
+            L.marker(s.koordinat).addTo(map).bindPopup(popup);
         });
 
-        
+        function createRoute(lat, lon) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var userLat = position.coords.latitude;
+                    var userLon = position.coords.longitude;
+
+                    // Hapus semua rute sebelumnya sebelum membuat yang baru
+                    if (window.routingControl) {
+                        map.removeControl(window.routingControl);
+                    }
+
+                    // Buat rute baru
+                    window.routingControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(userLat, userLon), // Lokasi pengguna
+                            L.latLng(lat, lon)          // Lokasi stasiun
+                        ],
+                        lineOptions: {
+                            styles: [
+                                {
+                                    color: "#00ACEA",  // Ganti dengan warna yang diinginkan
+                                    weight: 5,      // Tebal garis
+                                    opacity: 0.7    // Opasitas (keterlihatan)
+                                }
+                            ]
+                        },
+                        routeWhileDragging: true
+                    }).addTo(map);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
 
         $(document).ready(function() {
             // Initialize the autocomplete feature
@@ -107,7 +144,12 @@ while ($resultStasiun = mysqli_fetch_assoc($sqlStasiun)) {
             if (station) {
                 // Move the map to the selected station's coordinates and zoom in
                 map.setView(station.koordinat, 15); // 15 is the zoom level
-                L.marker(station.koordinat).addTo(map).bindPopup(station.nama).openPopup();
+                var popup = `
+                <div style="text-align: center;">
+                    <p><i class="fa-solid fa-train-subway"></i> ${station.nama}</p>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="createRoute(${station.koordinat[0]}, ${station.koordinat[1]})">Rute</button>
+                </div>`;
+                L.marker(station.koordinat).addTo(map).bindPopup(popup).openPopup();
             }
                 }
             });
