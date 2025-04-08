@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include '../koneksi.php';
+include '../database/koneksi.php';
 
 // Ambil data JSON dari JavaScript
 $data = json_decode(file_get_contents("php://input"), true);
