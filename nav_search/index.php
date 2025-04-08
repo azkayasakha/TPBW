@@ -1,5 +1,5 @@
 <?php
-include '../database/koneksi.php';
+include '../data/local/koneksi.php';
 
 $queryStasiun = "SELECT * FROM tbl_stasiun ORDER BY area ASC, nama ASC;";
 $sqlStasiun = mysqli_query($conn, $queryStasiun);

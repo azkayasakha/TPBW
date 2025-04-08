@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include '../database/koneksi.php';
+include '../data/local/koneksi.php';
 
 // Ambil data JSON dari JavaScript
 $data = json_decode(file_get_contents("php://input"), true);
@@ -24,6 +24,6 @@ if (isset($data['rute'])) {
 
     echo json_encode(['krlRoute' => $krlRoute]);
 } else {
-    echo json_encode(['error' => 'Data rute tidak ditemukan']);
+    echo json_encode(['error' => 'Data rute tidak ditemukan!!']);
 }
 ?>

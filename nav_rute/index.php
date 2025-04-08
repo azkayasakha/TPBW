@@ -1,5 +1,5 @@
 <?php
-include '../database/koneksi.php';
+include '../data/local/koneksi.php';
 
 $queryStasiun = "SELECT * FROM tbl_stasiun ORDER BY area ASC, nama ASC;";
 $sqlStasiun = mysqli_query($conn, $queryStasiun);
@@ -106,10 +106,13 @@ while ($resultStasiun = mysqli_fetch_assoc($sqlStasiun)) {
         function btnSubmit() {
             const stationFrom = document.getElementById('st-dari').value;
             const stationTo = document.getElementById('st-ke').value;
+            console.log(stationFrom, stationTo);
             const tarifElement = document.getElementById('tarif');
             const loadingIcon = document.getElementById('loading-icon');
 
             let listRute = findRoute(stationFrom, stationTo);
+
+            console.log("List Rute:", listRute);
 
             // Kirim data rute ke PHP dengan Fetch API
             fetch('proses_rute.php', {
